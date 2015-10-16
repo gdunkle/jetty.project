@@ -15,6 +15,7 @@
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
 //
+
 package org.eclipse.jetty.nosql.mongodb;
 
 import java.net.UnknownHostException;
@@ -77,7 +78,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
             }
         }
     }
-    
+
     /**
      * Scavenger
      *
@@ -93,7 +94,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
             }
         }
     }
-    
+
     private final static Logger __log = Log.getLogger("org.eclipse.jetty.server.session");
     final static DBObject __version_1 = new BasicDBObject(MongoSessionManager.__VERSION, 1);
     final static DBObject __valid_false = new BasicDBObject(MongoSessionManager.__VALID, false);
@@ -133,12 +134,12 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
      */
     private int _purgeLimit = 0;
     private int _scavengeBlockSize;
-    
+
     /* ------------------------------------------------------------ */
     public MongoSessionIdManager(Server server) throws UnknownHostException, MongoException {
         this(server, new Mongo().getDB("HttpSessions").getCollection("sessions"));
     }
-    
+
     /* ------------------------------------------------------------ */
     public MongoSessionIdManager(Server server, DBCollection sessions) {
         super(new Random());
@@ -153,7 +154,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
         _sessions.createIndex(BasicDBObjectBuilder.start().add(MongoSessionManager.__VALID, 1).add(MongoSessionManager.__ACCESSED, 1).get(),
                 BasicDBObjectBuilder.start().add("sparse", false).add("background", true).get());
     }
-    
+
     /* ------------------------------------------------------------ */
     @Override
     public void addSession(HttpSession session) {
@@ -166,7 +167,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
         __log.debug("MongoSessionIdManager:addSession {}", session.getId());
         _sessionsIds.add(session.getId());
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * Expire this session for all contexts that are sharing the session
@@ -188,32 +189,32 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
             }
         }
     }
-
+    
     /* ------------------------------------------------------------ */
     public long getPurgeInvalidAge() {
         return _purgeInvalidAge;
     }
-    
+
     /* ------------------------------------------------------------ */
     public int getPurgeLimit() {
         return _purgeLimit;
     }
-
+    
     /* ------------------------------------------------------------ */
     public long getPurgeValidAge() {
         return _purgeValidAge;
     }
-    
+
     /* ------------------------------------------------------------ */
     public int getScavengeBlockSize() {
         return _scavengeBlockSize;
     }
-    
+
     /* ------------------------------------------------------------ */
     public DBCollection getSessions() {
         return _sessions;
     }
-
+    
     /* ------------------------------------------------------------ */
     /**
      * Searches database to find if the session id known to mongo, and is it valid
@@ -233,7 +234,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
         }
         return false;
     }
-    
+
     /* ------------------------------------------------------------ */
     /** Remove the session id from the list of in-use sessions.
      * Inform all other known contexts that sessions with the same id should be
@@ -256,12 +257,12 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
             }
         }
     }
-    
+
     /* ------------------------------------------------------------ */
     public boolean isPurgeEnabled() {
         return _purge;
     }
-    
+
     /* ------------------------------------------------------------ */
     @Override
     public void removeSession(HttpSession session) {
@@ -270,7 +271,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
         }
         _sessionsIds.remove(session.getId());
     }
-    
+
     /* ------------------------------------------------------------ */
     @Override
     public void renewSessionId(String oldClusterId, String oldNodeId, HttpServletRequest request) {
@@ -290,12 +291,12 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
             }
         }
     }
-    
+
     /* ------------------------------------------------------------ */
     public void setPurge(boolean purge) {
         this._purge = purge;
     }
-    
+
     /* ------------------------------------------------------------ */
     public void setPurgeDelay(long purgeDelay) {
         if (isRunning()) {
@@ -303,7 +304,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
         }
         this._purgeDelay = purgeDelay;
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * sets how old a session is to be persisted past the point it is
@@ -313,7 +314,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
     public void setPurgeInvalidAge(long purgeValidAge) {
         this._purgeInvalidAge = purgeValidAge;
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * The maximum number of items to return from a purge query. If &lt;= 0 there is no limit. Defaults to 0
@@ -323,7 +324,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
     public void setPurgeLimit(int purgeLimit) {
         _purgeLimit = purgeLimit;
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * sets how old a session is to be persist past the point it is
@@ -335,7 +336,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
     public void setPurgeValidAge(long purgeValidAge) {
         this._purgeValidAge = purgeValidAge;
     }
-    
+
     /* ------------------------------------------------------------ */
     /** When scavenging, the max number of session ids in the query.
      *
@@ -344,7 +345,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
     public void setScavengeBlockSize(int size) {
         _scavengeBlockSize = size;
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * The period in seconds between scavenge checks.
@@ -357,7 +358,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
         else
             _scavengePeriod = TimeUnit.SECONDS.toMillis(scavengePeriod);
     }
-    
+
     /* ------------------------------------------------------------ */
     @Override
     protected void doStart() throws Exception {
@@ -391,7 +392,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
                 __log.debug("Purger disabled");
         }
     }
-    
+
     /* ------------------------------------------------------------ */
     @Override
     protected void doStop() throws Exception {
@@ -411,7 +412,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
         }
         super.doStop();
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * Purge is a process that cleans the mongodb cluster of old sessions that are no
@@ -459,7 +460,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
             }
         }
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * Purge is a process that cleans the mongodb cluster of old sessions that are no
@@ -476,7 +477,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
             _sessions.remove(session);
         }
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * Scavenge is a process that periodically checks the tracked session
@@ -506,7 +507,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
         if (!block.isEmpty())
             scavengeBlock(now, block);
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * Check a block of session ids for expiry and thus scavenge.
@@ -527,7 +528,7 @@ public class MongoSessionIdManager extends AbstractSessionIdManager {
             expireAll((String) session.get(MongoSessionManager.__ID));
         }
     }
-
+    
     /* ------------------------------------------------------------ */
     /**
      * ScavengeFully will expire all sessions. In most circumstances
